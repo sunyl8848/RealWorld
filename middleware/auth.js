@@ -10,7 +10,7 @@ module.exports = async (req, res, next) => {
     token = token ? token.split("Bearer ")[1] : null;
 
     if (!token) {
-    return res.status(401).end();
+      return res.status(401).end();
     }
     try {
       let payload = await verify(token, jwtSecret);
