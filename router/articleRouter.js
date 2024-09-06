@@ -2,20 +2,10 @@ const express = require("express");
 const router = express.Router();
 const auth = require("../middleware/auth");
 const articleControl = require("../controller/articleControl");
-const {
-  createArticleValidator,
-  getArticleValidator,
-} = require("../validator/articleValidator");
+const { createArticleValidator, getArticleValidator } = require("../validator/articleValidator");
 
 // List Articles 获取文章列表
-router.get("/", async (req, res, next) => {
-  try {
-    // 处理请求
-    res.send("get /");
-  } catch (err) {
-    next(err);
-  }
-});
+router.get("/", articleControl.getArticleList);
 
 // Feed Articles 获取用户关注的作者文章列表
 router.get("/feed", async (req, res, next) => {
