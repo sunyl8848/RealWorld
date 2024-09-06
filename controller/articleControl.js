@@ -30,7 +30,12 @@ module.exports.getArticle = async (req, res, next) => {
 module.exports.getArticleList = async (req, res, next) => {
   try {
     // 处理请求
-    let articles = await articleModel.find();
+    const { offset = 0, limit = 20, tag } = req.query;
+    let filter = {};
+    if (tag) {
+      filter.tagList = tag;
+    }
+    let articles = await articleModel.find(filter).skip(+offset).limit(+limit);
     let articlesCount = await articleModel.countDocuments();
 
     res.status(200).json({ articles, articlesCount });
