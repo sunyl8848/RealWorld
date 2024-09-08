@@ -60,9 +60,26 @@ module.exports.getArticleList = async (req, res, next) => {
 module.exports.updateArticle = async (req, res, next) => {
   try {
     // 处理请求
-    res.status(200).end()
-    // let articles = await articleModel.find(filter).skip(+offset).limit(+limit).sort({createdAt:-1});
-    // let articlesCount = await articleModel.countDocuments();
+    const bodyArticle = req.body.article;
+    const article = req.article;
+    article.title = bodyArticle.title || article.title;
+    article.description = bodyArticle.description || article.description;
+    article.body = bodyArticle.body || article.body;
+    article.tagList = bodyArticle.tagList || article.tagList;
+    await article.save();
+    res.status(200).json({article});
+  } catch (err) {
+    next(err);
+  }
+};
+
+//删除文章
+module.exports.deleteArticle = async (req, res, next) => {
+  try {
+      // 处理请求
+      const article = req.article;
+      await article.deleteOne();
+      res.status(204).end();
   } catch (err) {
     next(err);
   }

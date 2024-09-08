@@ -1,6 +1,7 @@
 const { default: mongoose } = require("mongoose");
 const validate = require("../middleware/validate");
 const { body, param } = require("express-validator");
+const { articleModel } = require("../model");
 
 module.exports.createArticleValidator = [
   validate([
@@ -21,7 +22,25 @@ module.exports.getArticleValidator = [
 ];
 
 module.exports.updateArticleValidator = [
-  validate([
-    validate.isValidObject(['params'], 'articleId')
-  ]),
+  validate(
+    [validate.isValidObject(["params"], "articleId")],
+  ),
+  async (req, res, next) => {
+    const articleId = req.params.articleId;
+    const article = await articleModel.findById(articleId);
+    req.article = article;
+    if (!article) {
+      res.status(404).end();
+    }
+    next();
+  },
+  async (req, res, next) => {
+    if (req.user._id.toString() !== req.article.author.toString()) {
+      res.status(403).end();
+    }
+    next();
+  }
 ];
+
+// 删除文章
+module.exports.deleteArticleValidator = module.exports.updateArticleValidator;
