@@ -19,3 +19,9 @@ module.exports.getArticleValidator = [
     }),
   ]),
 ];
+
+module.exports.updateArticleValidator = [
+  validate([
+    validate.isValidObject(['params'], 'articleId')
+  ]),
+];

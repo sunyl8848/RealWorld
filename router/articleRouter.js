@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const auth = require("../middleware/auth");
 const articleControl = require("../controller/articleControl");
-const { createArticleValidator, getArticleValidator } = require("../validator/articleValidator");
+const { createArticleValidator, getArticleValidator, updateArticleValidator } = require("../validator/articleValidator");
 
 // List Articles 获取文章列表
 router.get("/", articleControl.getArticleList);
@@ -24,14 +24,7 @@ router.get("/:articleId", getArticleValidator, articleControl.getArticle);
 router.post("/", auth, createArticleValidator, articleControl.createArticle);
 
 // Update Article 更新文章
-router.put("/:articleId", async (req, res, next) => {
-  try {
-    // 处理请求
-    res.send("put /articles/:slug");
-  } catch (err) {
-    next(err);
-  }
-});
+router.put("/:articleId", updateArticleValidator, articleControl.updateArticle);
 
 // Delete Article 删除文章
 router.delete("/:articleId", async (req, res, next) => {
